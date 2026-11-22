@@ -8,6 +8,8 @@ databases. You open one `.md` file, write, and save.
 Built with [Tauri 2](https://tauri.app) (Rust) and
 [CodeMirror 6](https://codemirror.net), without a UI framework.
 
+![mdw editing a note with the Tokyo Night theme: headings, a task list, a table, a quote, math and a code block render in place, while the line under the cursor shows its raw Markdown](docs/screenshot.png)
+
 ## Features
 
 - **Live preview** of headings, emphasis, links, lists, task lists, quotes,
@@ -24,6 +26,23 @@ Built with [Tauri 2](https://tauri.app) (Rust) and
   unreferenced images, and list broken links.
 - **Fast startup**: an optional background server keeps a window preloaded,
   so files open in about 0.1 s.
+
+## Speed and memory
+
+| How it runs | Time to first content | Memory |
+|---|---|---|
+| Background server (default) | ~0.1 s | ~200 MB while idle, plus more for each open window |
+| `mdw --no-server` | ~0.4 s | Used only while a window is open |
+
+The first `mdw` you run starts a small server that keeps one editor window
+preloaded and hidden, so later files open almost instantly. The memory
+figure counts the server and its WebKit processes, with shared libraries
+split across processes (PSS). Check it with `mdw --server-status`. Free the
+memory with `mdw --stop-server`, or set `server = false` in the config to
+always run without the server.
+
+These numbers were measured on Fedora with WebKitGTK and a 50-line sample
+document. Your results will vary with the hardware and the document.
 
 ## Platform
 
