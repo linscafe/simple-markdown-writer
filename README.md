@@ -69,8 +69,10 @@ npx tauri build --no-bundle
 install -m755 src-tauri/target/release/mdw ~/.local/bin/mdw
 ```
 
-To build RPM, DEB and AppImage packages with a desktop entry, run
-`npm run package` instead.
+To also get an app-menu entry and "Open with mdw" for `.md` files, run
+`scripts/install-local.sh` instead of the last two commands. It needs no sudo.
+[`docs/packaging.md`](docs/packaging.md) covers building RPM, DEB and AppImage
+packages and testing them.
 
 ## Usage
 
