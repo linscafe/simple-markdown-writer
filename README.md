@@ -43,8 +43,8 @@ sudo dnf install gcc webkit2gtk4.1-devel openssl-devel librsvg2-devel
 Then:
 
 ```sh
-git clone https://github.com/linscafe/markdown-writer.git
-cd markdown-writer
+git clone https://github.com/linscafe/simple-markdown-writer.git
+cd simple-markdown-writer
 npm install
 npx tauri build --no-bundle
 install -m755 src-tauri/target/release/mdw ~/.local/bin/mdw
