@@ -1,0 +1,28 @@
+:root[data-theme="kanagawa-wave"] {
+  color-scheme: dark;
+  --bg: #1f1f28;
+  --fg: #dcd7ba;
+  --muted: #727169;
+  --error: #e82424;
+  --accent: #957fb8;
+  --cursor: #c8c093;
+  --selection: #223249;
+  --line-active: #363646;
+  --link: #7fb4ca;
+  --code-bg: #16161d;
+  --code-fg: #98bb6c;
+  --code-function: #7e9cd8;
+  --code-number: #d27e99;
+  --quote-border: #54546d;
+  --hr: #54546d;
+  --table-border: #54546d;
+  --h1: #7e9cd8;
+  --h2: #7e9cd8;
+  --h3: #7e9cd8;
+  --h4: #7e9cd8;
+  --h5: #7e9cd8;
+  --h6: #7e9cd8;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

@@ -1,0 +1,28 @@
+:root[data-theme="kanagawa-dragon"] {
+  color-scheme: dark;
+  --bg: #181616;
+  --fg: #c5c9c5;
+  --muted: #737c73;
+  --error: #e82424;
+  --accent: #8992a7;
+  --cursor: #c8c093;
+  --selection: #223249;
+  --line-active: #393836;
+  --link: #949fb5;
+  --code-bg: #0d0c0c;
+  --code-fg: #8a9a7b;
+  --code-function: #8ba4b0;
+  --code-number: #a292a3;
+  --quote-border: #625e5a;
+  --hr: #625e5a;
+  --table-border: #625e5a;
+  --h1: #8ba4b0;
+  --h2: #8ba4b0;
+  --h3: #8ba4b0;
+  --h4: #8ba4b0;
+  --h5: #8ba4b0;
+  --h6: #8ba4b0;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

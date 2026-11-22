@@ -1,0 +1,28 @@
+:root[data-theme="oxocarbon"] {
+  color-scheme: dark;
+  --bg: #161616;
+  --fg: #d0d0d0;
+  --muted: #6f6f6f;
+  --error: #ee5396;
+  --accent: #78a9ff;
+  --cursor: #d0d0d0;
+  --selection: #393939;
+  --line-active: #262626;
+  --link: #be95ff;
+  --code-bg: #262626;
+  --code-fg: #be95ff;
+  --code-function: #ff7eb6;
+  --code-number: #82cfff;
+  --quote-border: #525252;
+  --hr: #525252;
+  --table-border: #525252;
+  --h1: #ee5396;
+  --h2: #ee5396;
+  --h3: #ee5396;
+  --h4: #ee5396;
+  --h5: #ee5396;
+  --h6: #ee5396;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

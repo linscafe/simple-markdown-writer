@@ -1,0 +1,49 @@
+# mdw configuration: ~/.config/mdw/config.toml
+# Every value below is the built-in default. Alternatives are in the comments.
+
+# Keep a background server and one preloaded window for fast opens.
+server = true
+
+# auto (follows the OS light/dark setting) | light | dark | sepia |
+# solarized-light | solarized-dark | nord | gruvbox-dark | gruvbox-light | dracula |
+# tokyonight-night | tokyonight-storm | tokyonight-day |
+# catppuccin-mocha | catppuccin-macchiato | catppuccin-frappe | catppuccin-latte |
+# kanagawa-wave | kanagawa-dragon | kanagawa-lotus | rose-pine | rose-pine-moon |
+# rose-pine-dawn | nightfox | dayfox | carbonfox | onedark | onelight |
+# everforest-dark | everforest-light | sonokai | github-dark | github-light |
+# material-oceanic | material-palenight | monokai | ayu-dark | ayu-mirage |
+# ayu-light | oxocarbon | nightfly | moonfly | papercolor-light | papercolor-dark |
+# <name> for ~/.config/mdw/themes/<name>.css
+# A theme chosen with Ctrl+Shift+T or :theme is remembered and takes precedence.
+theme = "auto"
+
+# CSS font-family lists; unset uses "Noto Sans", system-ui, sans-serif and monospace.
+# Each listed font that isn't installed costs startup time (WebKit searches for it).
+# font_body = "Inter, sans-serif"
+# font_mono = "'JetBrains Mono', monospace"
+
+# Text size in px.
+font_size = 17
+# Maximum width of the text column in px.
+line_width = 760
+
+# Folder for pasted/dropped images, relative to the document.
+# {name} is the document's file name without extension.
+# e.g. "assets" (shared by all documents in the folder) | "images/{name}"
+image_dir = "{name}.assets"
+
+# true: copy dropped/picked images into image_dir
+# false: link to the original file instead (Shift+drop does this for one drop)
+copy_images = true
+
+# Vim keybindings: true | false. Ctrl+Alt+V toggles for the current session.
+vim = true
+# For custom mappings, replace `vim = true` with this table (keep it last in the
+# file: keys after a [table] header belong to that table).
+# mode: n (normal) | i (insert) | v (visual) | o (operator-pending)
+# [vim]
+# enabled = true
+# map = [
+#   { lhs = "jj", rhs = "<Esc>", mode = "i" },
+#   { lhs = "H", rhs = "^", mode = "n" },
+# ]

@@ -1,0 +1,28 @@
+:root[data-theme="gruvbox-light"] {
+  color-scheme: light;
+  --bg: #fbf1c7;
+  --fg: #3c3836;
+  --muted: #928374;
+  --error: #9d0006;
+  --accent: #9d0006;
+  --cursor: #3c3836;
+  --selection: #d5c4a1;
+  --line-active: #f2e5bc;
+  --link: #076678;
+  --code-bg: #ebdbb2;
+  --code-fg: #79740e;
+  --code-function: #79740e;
+  --code-number: #8f3f71;
+  --quote-border: #bdae93;
+  --hr: #bdae93;
+  --table-border: #bdae93;
+  --h1: #79740e;
+  --h2: #79740e;
+  --h3: #b57614;
+  --h4: #b57614;
+  --h5: #b57614;
+  --h6: #b57614;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

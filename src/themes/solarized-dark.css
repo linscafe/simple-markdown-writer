@@ -1,0 +1,26 @@
+:root[data-theme="solarized-dark"] {
+  color-scheme: dark;
+  --bg: #002b36;
+  --fg: #839496;
+  --muted: #657b83;
+  --error: #dc322f;
+  --accent: #2aa198;
+  --cursor: #839496;
+  --selection: #073642;
+  --line-active: #073642;
+  --link: #2aa198;
+  --code-bg: #073642;
+  --code-fg: #93a1a1;
+  --quote-border: #586e75;
+  --hr: #586e75;
+  --table-border: #586e75;
+  --h1: #2aa198;
+  --h2: #2aa198;
+  --h3: #2aa198;
+  --h4: #839496;
+  --h5: #839496;
+  --h6: #839496;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

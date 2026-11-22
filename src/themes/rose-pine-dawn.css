@@ -1,0 +1,28 @@
+:root[data-theme="rose-pine-dawn"] {
+  color-scheme: light;
+  --bg: #faf4ed;
+  --fg: #464261;
+  --muted: #797593;
+  --error: #b4637a;
+  --accent: #286983;
+  --cursor: #464261;
+  --selection: #eae2e3;
+  --line-active: #f2e9e1;
+  --link: #907aa9;
+  --code-bg: #fffaf3;
+  --code-fg: #ea9d34;
+  --code-function: #d7827e;
+  --code-number: #ea9d34;
+  --quote-border: #cecacd;
+  --hr: #cecacd;
+  --table-border: #cecacd;
+  --h1: #907aa9;
+  --h2: #56949f;
+  --h3: #d7827e;
+  --h4: #ea9d34;
+  --h5: #286983;
+  --h6: #6d8f89;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

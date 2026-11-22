@@ -1,0 +1,28 @@
+:root[data-theme="moonfly"] {
+  color-scheme: dark;
+  --bg: #080808;
+  --fg: #c6c6c6;
+  --muted: #949494;
+  --error: #ff5d5d;
+  --accent: #cf87e8;
+  --cursor: #c6c6c6;
+  --selection: #323437;
+  --line-active: #1c1c1c;
+  --link: #ae81ff;
+  --code-bg: #212121;
+  --code-fg: #c6c684;
+  --code-function: #74b2ff;
+  --code-number: #de935f;
+  --quote-border: #4e4e4e;
+  --hr: #4e4e4e;
+  --table-border: #4e4e4e;
+  --h1: #adadf3;
+  --h2: #adadf3;
+  --h3: #79dac8;
+  --h4: #de935f;
+  --h5: #74b2ff;
+  --h6: #cf87e8;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

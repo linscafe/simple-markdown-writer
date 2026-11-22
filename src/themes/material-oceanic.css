@@ -1,0 +1,28 @@
+:root[data-theme="material-oceanic"] {
+  color-scheme: dark;
+  --bg: #25363b;
+  --fg: #b0bec5;
+  --muted: #7c9ead;
+  --error: #ff5370;
+  --accent: #c792ea;
+  --cursor: #ffcc00;
+  --selection: #395b65;
+  --line-active: #314549;
+  --link: #80cbc4;
+  --code-bg: #1c2c30;
+  --code-fg: #c3e88d;
+  --code-function: #82aaff;
+  --code-number: #f78c6c;
+  --quote-border: #426367;
+  --hr: #426367;
+  --table-border: #426367;
+  --h1: #89ddff;
+  --h2: #89ddff;
+  --h3: #89ddff;
+  --h4: #89ddff;
+  --h5: #89ddff;
+  --h6: #89ddff;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

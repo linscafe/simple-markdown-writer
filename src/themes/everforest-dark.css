@@ -1,0 +1,28 @@
+:root[data-theme="everforest-dark"] {
+  color-scheme: dark;
+  --bg: #2d353b;
+  --fg: #d3c6aa;
+  --muted: #859289;
+  --error: #e67e80;
+  --accent: #e67e80;
+  --cursor: #d3c6aa;
+  --selection: #543a48;
+  --line-active: #343f44;
+  --link: #7fbbb3;
+  --code-bg: #3d484d;
+  --code-fg: #83c092;
+  --code-function: #a7c080;
+  --code-number: #d699b6;
+  --quote-border: #56635f;
+  --hr: #56635f;
+  --table-border: #56635f;
+  --h1: #e67e80;
+  --h2: #e69875;
+  --h3: #dbbc7f;
+  --h4: #a7c080;
+  --h5: #7fbbb3;
+  --h6: #d699b6;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

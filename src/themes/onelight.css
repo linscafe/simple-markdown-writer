@@ -1,0 +1,28 @@
+:root[data-theme="onelight"] {
+  color-scheme: light;
+  --bg: #fafafa;
+  --fg: #383a42;
+  --muted: #818387;
+  --error: #e45649;
+  --accent: #a626a4;
+  --cursor: #383a42;
+  --selection: #dcdcdc;
+  --line-active: #f0f0f0;
+  --link: #0184bc;
+  --code-bg: #e6e6e6;
+  --code-fg: #50a14f;
+  --code-function: #4078f2;
+  --code-number: #c18401;
+  --quote-border: #c9c9c9;
+  --hr: #c9c9c9;
+  --table-border: #c9c9c9;
+  --h1: #e45649;
+  --h2: #a626a4;
+  --h3: #c18401;
+  --h4: #e45649;
+  --h5: #a626a4;
+  --h6: #c18401;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

@@ -1,0 +1,26 @@
+:root[data-theme="solarized-light"] {
+  color-scheme: light;
+  --bg: #fdf6e3;
+  --fg: #657b83;
+  --muted: #839496;
+  --error: #dc322f;
+  --accent: #268bd2;
+  --cursor: #657b83;
+  --selection: #eee8d5;
+  --line-active: #f4efdc;
+  --link: #268bd2;
+  --code-bg: #eee8d5;
+  --code-fg: #586e75;
+  --quote-border: #93a1a1;
+  --hr: #93a1a1;
+  --table-border: #93a1a1;
+  --h1: #268bd2;
+  --h2: #268bd2;
+  --h3: #268bd2;
+  --h4: #657b83;
+  --h5: #657b83;
+  --h6: #657b83;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

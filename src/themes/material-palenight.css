@@ -1,0 +1,28 @@
+:root[data-theme="material-palenight"] {
+  color-scheme: dark;
+  --bg: #292d3e;
+  --fg: #a6accd;
+  --muted: #717cb4;
+  --error: #ff5370;
+  --accent: #c792ea;
+  --cursor: #ffcc00;
+  --selection: #444267;
+  --line-active: #414863;
+  --link: #80cbc4;
+  --code-bg: #1b1e2b;
+  --code-fg: #c3e88d;
+  --code-function: #82aaff;
+  --code-number: #f78c6c;
+  --quote-border: #515772;
+  --hr: #515772;
+  --table-border: #515772;
+  --h1: #89ddff;
+  --h2: #89ddff;
+  --h3: #89ddff;
+  --h4: #89ddff;
+  --h5: #89ddff;
+  --h6: #89ddff;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

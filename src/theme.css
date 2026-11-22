@@ -1,0 +1,8 @@
+.mdw-theme-overlay { position: fixed; inset: 0; z-index: 100; display: flex; justify-content: flex-end; align-items: flex-start; padding: 16px; background: transparent; }
+.mdw-theme-picker { width: 260px; max-width: 100%; padding: 10px; border: 1px solid var(--muted); border-radius: 8px; background: var(--bg); color: var(--fg); font-family: var(--font-body); box-shadow: 0 6px 24px color-mix(in srgb, var(--fg) 25%, transparent); }
+.mdw-theme-picker input { width: 100%; padding: 10px; margin-bottom: 8px; font: inherit; background: var(--code-bg); color: var(--fg); border: 1px solid var(--table-border); outline-color: var(--accent); }
+.mdw-theme-picker [role="listbox"] { max-height: 60vh; overflow: auto; }
+.mdw-theme-option { padding: 8px 10px; cursor: pointer; border-radius: 4px; }
+.mdw-theme-option[aria-selected="true"] { background: var(--selection); color: var(--fg); }
+.cm-editor .cm-activeLine { background: var(--line-active); }
+.cm-editor .cm-code { font-family: var(--font-mono); }

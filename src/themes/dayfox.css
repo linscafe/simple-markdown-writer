@@ -1,0 +1,28 @@
+:root[data-theme="dayfox"] {
+  color-scheme: light;
+  --bg: #f6f2ee;
+  --fg: #3d2b5a;
+  --muted: #837a72;
+  --error: #a5222f;
+  --accent: #6e33ce;
+  --cursor: #3d2b5a;
+  --selection: #e7d2be;
+  --line-active: #d3c7bb;
+  --link: #396847;
+  --code-bg: #e4dcd4;
+  --code-fg: #396847;
+  --code-function: #223d90;
+  --code-number: #955f61;
+  --quote-border: #aab0ad;
+  --hr: #aab0ad;
+  --table-border: #aab0ad;
+  --h1: #223d90;
+  --h2: #223d90;
+  --h3: #223d90;
+  --h4: #223d90;
+  --h5: #223d90;
+  --h6: #223d90;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

@@ -1,0 +1,28 @@
+:root[data-theme="ayu-light"] {
+  color-scheme: light;
+  --bg: #f8f9fa;
+  --fg: #5c6166;
+  --muted: #8a9199;
+  --error: #e65050;
+  --accent: #fa8d3e;
+  --cursor: #ffaa33;
+  --selection: #d3e1f5;
+  --line-active: #e7eaed;
+  --link: #55b4d4;
+  --code-bg: #f3f4f5;
+  --code-fg: #86b300;
+  --code-function: #f2ae49;
+  --code-number: #a37acc;
+  --quote-border: #cccfd3;
+  --hr: #cccfd3;
+  --table-border: #cccfd3;
+  --h1: #fa8d3e;
+  --h2: #fa8d3e;
+  --h3: #fa8d3e;
+  --h4: #fa8d3e;
+  --h5: #fa8d3e;
+  --h6: #fa8d3e;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

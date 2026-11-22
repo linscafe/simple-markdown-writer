@@ -1,0 +1,28 @@
+:root[data-theme="catppuccin-macchiato"] {
+  color-scheme: dark;
+  --bg: #24273a;
+  --fg: #cad3f5;
+  --muted: #939ab7;
+  --error: #ed8796;
+  --accent: #c6a0f6;
+  --cursor: #f4dbd6;
+  --selection: #494d64;
+  --line-active: #303347;
+  --link: #8aadf4;
+  --code-bg: #1e2030;
+  --code-fg: #a6da95;
+  --code-function: #8aadf4;
+  --code-number: #f5a97f;
+  --quote-border: #5b6078;
+  --hr: #5b6078;
+  --table-border: #5b6078;
+  --h1: #ed8796;
+  --h2: #f5a97f;
+  --h3: #eed49f;
+  --h4: #a6da95;
+  --h5: #7dc4e4;
+  --h6: #b7bdf8;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

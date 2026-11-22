@@ -1,0 +1,24 @@
+.cm-editor .cm-md-codeblock { background: var(--code-bg, var(--bg)); color: var(--code-fg, var(--fg)); font-family: var(--font-mono); }
+.cm-editor .cm-md-fence { min-height: 6px; height: 6px; line-height: 6px; position: relative; border-top: 1px solid var(--table-border, var(--muted)); }
+.cm-md-fence-label { position: absolute; right: 0.6em; top: 2px; color: var(--muted); font: 0.7rem/1 var(--font-mono); }
+.cm-md-table { overflow-x: auto; }
+.cm-md-table-first { padding-top: 0.5em; }
+.cm-md-table-last { padding-bottom: 0.5em; }
+.cm-md-table:not(.cm-md-table-first.cm-md-table-last) table { table-layout: fixed; overflow-wrap: anywhere; }
+.cm-md-table table { border-collapse: collapse; width: auto; max-width: 100%; }
+.cm-md-table :is(th, td) { border: 1px solid var(--table-border, var(--muted)); padding: 0.35em 0.7em; text-align: left; cursor: text; }
+.cm-md-table th { background: var(--code-bg, var(--bg)); }
+.cm-md-table code { font-family: var(--font-mono); background: var(--code-bg, var(--bg)); color: var(--code-fg, var(--fg)); }
+.cm-md-table a { color: var(--link, var(--accent)); }
+.cm-editor .cm-md-table-source { font-family: var(--font-mono); white-space: pre; }
+.cm-md-math { color: var(--fg); }
+.cm-md-math-block { overflow-x: auto; padding: 0.5em 0; }
+.cm-md-math-pending { color: var(--muted); }
+.cm-md-math-error { color: var(--error, var(--accent)); }
+.cm-md-math-block.cm-md-math-error { white-space: pre-wrap; }
+.cm-md-image { display: inline-block; max-width: 100%; vertical-align: middle; }
+.cm-md-image img { max-width: 100%; object-fit: contain; vertical-align: middle; }
+.cm-md-image-standalone { display: block; padding: 0.5em 0; }
+.cm-md-image-thumbnail { display: block; max-height: 64px; margin: 0.25em 0; }
+.cm-md-image-thumbnail img { max-width: 120px; max-height: 64px; width: auto; height: auto; }
+.cm-md-image-error { border: 1px solid var(--error, var(--accent)); color: var(--muted); background: var(--code-bg, var(--bg)); padding: 0.6em; font: 0.8em var(--font-mono); overflow-wrap: anywhere; }

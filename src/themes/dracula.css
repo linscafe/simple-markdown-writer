@@ -1,0 +1,26 @@
+:root[data-theme="dracula"] {
+  color-scheme: dark;
+  --bg: #282a36;
+  --fg: #f8f8f2;
+  --muted: #a8a9be;
+  --error: #ff5555;
+  --accent: #bd93f9;
+  --cursor: #f8f8f2;
+  --selection: #44475a;
+  --line-active: #303341;
+  --link: #bd93f9;
+  --code-bg: #21222c;
+  --code-fg: #50fa7b;
+  --quote-border: #6272a4;
+  --hr: #6272a4;
+  --table-border: #6272a4;
+  --h1: #bd93f9;
+  --h2: #bd93f9;
+  --h3: #bd93f9;
+  --h4: #f8f8f2;
+  --h5: #f8f8f2;
+  --h6: #f8f8f2;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

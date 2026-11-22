@@ -1,0 +1,28 @@
+:root[data-theme="ayu-dark"] {
+  color-scheme: dark;
+  --bg: #0b0e14;
+  --fg: #bfbdb6;
+  --muted: #636a72;
+  --error: #d95757;
+  --accent: #ff8f40;
+  --cursor: #e6b450;
+  --selection: #1b3a5b;
+  --line-active: #11151c;
+  --link: #39bae6;
+  --code-bg: #0f131a;
+  --code-fg: #aad94c;
+  --code-function: #ffb454;
+  --code-number: #d2a6ff;
+  --quote-border: #454b55;
+  --hr: #454b55;
+  --table-border: #454b55;
+  --h1: #ff8f40;
+  --h2: #ff8f40;
+  --h3: #ff8f40;
+  --h4: #ff8f40;
+  --h5: #ff8f40;
+  --h6: #ff8f40;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

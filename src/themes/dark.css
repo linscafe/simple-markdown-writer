@@ -1,0 +1,26 @@
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #202124;
+  --fg: #e3e4e6;
+  --muted: #a2a5ac;
+  --error: #f08088;
+  --accent: #93b6ee;
+  --cursor: #e3e4e6;
+  --selection: #3c4d68;
+  --line-active: #292b30;
+  --link: #93b6ee;
+  --code-bg: #2b2e34;
+  --code-fg: #c8d8f0;
+  --quote-border: #50545d;
+  --hr: #50545d;
+  --table-border: #50545d;
+  --h1: #93b6ee;
+  --h2: #93b6ee;
+  --h3: #93b6ee;
+  --h4: #e3e4e6;
+  --h5: #e3e4e6;
+  --h6: #e3e4e6;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

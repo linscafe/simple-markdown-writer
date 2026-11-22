@@ -1,0 +1,28 @@
+:root[data-theme="github-light"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --fg: #1f2328;
+  --muted: #57606a;
+  --error: #cf222e;
+  --accent: #cf222e;
+  --cursor: #1f2328;
+  --selection: #dae9f9;
+  --line-active: #e7eaf0;
+  --link: #0969da;
+  --code-bg: #f6f8fa;
+  --code-fg: #0a3069;
+  --code-function: #6639ba;
+  --code-number: #0550ae;
+  --quote-border: #d0d7de;
+  --hr: #d0d7de;
+  --table-border: #d0d7de;
+  --h1: #0550ae;
+  --h2: #0550ae;
+  --h3: #0550ae;
+  --h4: #0550ae;
+  --h5: #0550ae;
+  --h6: #0550ae;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

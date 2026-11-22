@@ -1,0 +1,28 @@
+:root[data-theme="kanagawa-lotus"] {
+  color-scheme: light;
+  --bg: #f2ecbc;
+  --fg: #545464;
+  --muted: #716e61;
+  --error: #e82424;
+  --accent: #624c83;
+  --cursor: #43436c;
+  --selection: #c9cbd1;
+  --line-active: #e4d794;
+  --link: #6693bf;
+  --code-bg: #e5ddb0;
+  --code-fg: #6f894e;
+  --code-function: #4d699b;
+  --code-number: #b35b79;
+  --quote-border: #a09cac;
+  --hr: #a09cac;
+  --table-border: #a09cac;
+  --h1: #4d699b;
+  --h2: #4d699b;
+  --h3: #4d699b;
+  --h4: #4d699b;
+  --h5: #4d699b;
+  --h6: #4d699b;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

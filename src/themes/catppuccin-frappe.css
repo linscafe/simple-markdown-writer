@@ -1,0 +1,28 @@
+:root[data-theme="catppuccin-frappe"] {
+  color-scheme: dark;
+  --bg: #303446;
+  --fg: #c6d0f5;
+  --muted: #949cbb;
+  --error: #e78284;
+  --accent: #ca9ee6;
+  --cursor: #f2d5cf;
+  --selection: #51576d;
+  --line-active: #3b3f52;
+  --link: #8caaee;
+  --code-bg: #292c3c;
+  --code-fg: #a6d189;
+  --code-function: #8caaee;
+  --code-number: #ef9f76;
+  --quote-border: #626880;
+  --hr: #626880;
+  --table-border: #626880;
+  --h1: #e78284;
+  --h2: #ef9f76;
+  --h3: #e5c890;
+  --h4: #a6d189;
+  --h5: #85c1dc;
+  --h6: #babbf1;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

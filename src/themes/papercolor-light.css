@@ -1,0 +1,28 @@
+:root[data-theme="papercolor-light"] {
+  color-scheme: light;
+  --bg: #eeeeee;
+  --fg: #444444;
+  --muted: #878787;
+  --error: #af0000;
+  --accent: #d70087;
+  --cursor: #444444;
+  --selection: #afd7ff;
+  --line-active: #e4e4e4;
+  --link: #005faf;
+  --code-bg: #e4e4e4;
+  --code-fg: #5f8700;
+  --code-function: #444444;
+  --code-number: #d75f00;
+  --quote-border: #bcbcbc;
+  --hr: #bcbcbc;
+  --table-border: #bcbcbc;
+  --h1: #d70087;
+  --h2: #d75f00;
+  --h3: #8700af;
+  --h4: #d75f00;
+  --h5: #008700;
+  --h6: #008700;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

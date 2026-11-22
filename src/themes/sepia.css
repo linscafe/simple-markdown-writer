@@ -1,0 +1,26 @@
+:root[data-theme="sepia"] {
+  color-scheme: light;
+  --bg: #f4ecd8;
+  --fg: #514534;
+  --muted: #897962;
+  --error: #b13e36;
+  --accent: #946b36;
+  --cursor: #514534;
+  --selection: #e2d1ac;
+  --line-active: #ece1c8;
+  --link: #946b36;
+  --code-bg: #e9dec4;
+  --code-fg: #755832;
+  --quote-border: #c6b591;
+  --hr: #c6b591;
+  --table-border: #c6b591;
+  --h1: #946b36;
+  --h2: #946b36;
+  --h3: #946b36;
+  --h4: #514534;
+  --h5: #514534;
+  --h6: #514534;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

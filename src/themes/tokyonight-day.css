@@ -1,0 +1,28 @@
+:root[data-theme="tokyonight-day"] {
+  color-scheme: light;
+  --bg: #e1e2e7;
+  --fg: #3760bf;
+  --muted: #68709a;
+  --error: #c64343;
+  --accent: #9854f1;
+  --cursor: #3760bf;
+  --selection: #b7c1e3;
+  --line-active: #c4c8da;
+  --link: #118c74;
+  --code-bg: #d0d5e3;
+  --code-fg: #587539;
+  --code-function: #2e7de9;
+  --code-number: #b15c00;
+  --quote-border: #a8aecb;
+  --hr: #a8aecb;
+  --table-border: #a8aecb;
+  --h1: #2e7de9;
+  --h2: #8c6c3e;
+  --h3: #587539;
+  --h4: #118c74;
+  --h5: #9854f1;
+  --h6: #7847bd;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

@@ -1,0 +1,28 @@
+:root[data-theme="nightfox"] {
+  color-scheme: dark;
+  --bg: #192330;
+  --fg: #cdcecf;
+  --muted: #738091;
+  --error: #c94f6d;
+  --accent: #9d79d6;
+  --cursor: #cdcecf;
+  --selection: #2b3b51;
+  --line-active: #29394f;
+  --link: #81b29a;
+  --code-bg: #131a24;
+  --code-fg: #81b29a;
+  --code-function: #86abdc;
+  --code-number: #f4a261;
+  --quote-border: #39506d;
+  --hr: #39506d;
+  --table-border: #39506d;
+  --h1: #86abdc;
+  --h2: #86abdc;
+  --h3: #86abdc;
+  --h4: #86abdc;
+  --h5: #86abdc;
+  --h6: #86abdc;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

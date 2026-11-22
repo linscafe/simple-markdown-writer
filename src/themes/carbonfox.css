@@ -1,0 +1,28 @@
+:root[data-theme="carbonfox"] {
+  color-scheme: dark;
+  --bg: #161616;
+  --fg: #f2f4f8;
+  --muted: #6e6f70;
+  --error: #ee5396;
+  --accent: #be95ff;
+  --cursor: #f2f4f8;
+  --selection: #525253;
+  --line-active: #252525;
+  --link: #25be6a;
+  --code-bg: #0c0c0c;
+  --code-fg: #25be6a;
+  --code-function: #8cb6ff;
+  --code-number: #3ddbd9;
+  --quote-border: #535353;
+  --hr: #535353;
+  --table-border: #535353;
+  --h1: #8cb6ff;
+  --h2: #8cb6ff;
+  --h3: #8cb6ff;
+  --h4: #8cb6ff;
+  --h5: #8cb6ff;
+  --h6: #8cb6ff;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

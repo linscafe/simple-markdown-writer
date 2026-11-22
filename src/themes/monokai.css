@@ -1,0 +1,28 @@
+:root[data-theme="monokai"] {
+  color-scheme: dark;
+  --bg: #272822;
+  --fg: #f8f8f2;
+  --muted: #75715e;
+  --error: #f92672;
+  --accent: #f92672;
+  --cursor: #f8f8f0;
+  --selection: #49483e;
+  --line-active: #3c3d37;
+  --link: #66d9ef;
+  --code-bg: #3c3d37;
+  --code-fg: #e6db74;
+  --code-function: #a6e22e;
+  --code-number: #ae81ff;
+  --quote-border: #64645e;
+  --hr: #64645e;
+  --table-border: #64645e;
+  --h1: #f8f8f2;
+  --h2: #f8f8f2;
+  --h3: #f8f8f2;
+  --h4: #f8f8f2;
+  --h5: #f8f8f2;
+  --h6: #f8f8f2;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

@@ -1,0 +1,50 @@
+.mdw-status {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 7px 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.mdw-status-mode {
+  min-width: 8ch;
+  padding: 1px 6px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--bg);
+  background: var(--accent);
+}
+
+.mdw-status-mode[data-mode="insert"] { background: var(--accent-insert, var(--accent)); }
+.mdw-status-mode[data-mode="visual"],
+.mdw-status-mode[data-mode="v-line"],
+.mdw-status-mode[data-mode="v-block"] { background: var(--accent-visual, var(--accent)); }
+.mdw-status-mode[data-mode="replace"] { background: var(--accent-replace, var(--accent)); }
+.mdw-status-mode[data-mode="plain"] { background: var(--muted); }
+
+.mdw-status-message {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg);
+}
+
+.mdw-status-file {
+  max-width: 30%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mdw-status-mode,
+.mdw-status-words,
+.mdw-status-position { flex-shrink: 0; white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .mdw-status { flex-wrap: wrap; gap: 6px 12px; }
+  .mdw-status-message { flex-basis: 40%; }
+  .mdw-status-file { max-width: 45%; }
+}

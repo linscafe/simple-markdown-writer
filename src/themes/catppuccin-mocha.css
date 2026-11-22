@@ -1,0 +1,28 @@
+:root[data-theme="catppuccin-mocha"] {
+  color-scheme: dark;
+  --bg: #1e1e2e;
+  --fg: #cdd6f4;
+  --muted: #9399b2;
+  --error: #f38ba8;
+  --accent: #cba6f7;
+  --cursor: #f5e0dc;
+  --selection: #45475a;
+  --line-active: #2a2b3c;
+  --link: #89b4fa;
+  --code-bg: #181825;
+  --code-fg: #a6e3a1;
+  --code-function: #89b4fa;
+  --code-number: #fab387;
+  --quote-border: #585b70;
+  --hr: #585b70;
+  --table-border: #585b70;
+  --h1: #f38ba8;
+  --h2: #fab387;
+  --h3: #f9e2af;
+  --h4: #a6e3a1;
+  --h5: #74c7ec;
+  --h6: #b4befe;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

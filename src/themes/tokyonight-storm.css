@@ -1,0 +1,28 @@
+:root[data-theme="tokyonight-storm"] {
+  color-scheme: dark;
+  --bg: #24283b;
+  --fg: #c0caf5;
+  --muted: #737aa2;
+  --error: #db4b4b;
+  --accent: #bb9af7;
+  --cursor: #c0caf5;
+  --selection: #2e3c64;
+  --line-active: #292e42;
+  --link: #1abc9c;
+  --code-bg: #1f2335;
+  --code-fg: #9ece6a;
+  --code-function: #7aa2f7;
+  --code-number: #ff9e64;
+  --quote-border: #3b4261;
+  --hr: #3b4261;
+  --table-border: #3b4261;
+  --h1: #7aa2f7;
+  --h2: #e0af68;
+  --h3: #9ece6a;
+  --h4: #1abc9c;
+  --h5: #bb9af7;
+  --h6: #9d7cd8;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}

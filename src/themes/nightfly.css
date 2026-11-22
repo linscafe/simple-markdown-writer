@@ -1,0 +1,28 @@
+:root[data-theme="nightfly"] {
+  color-scheme: dark;
+  --bg: #011627;
+  --fg: #c3ccdc;
+  --muted: #7c8f8f;
+  --error: #fc514e;
+  --accent: #c792ea;
+  --cursor: #c3ccdc;
+  --selection: #1d3b53;
+  --line-active: #092236;
+  --link: #ae81ff;
+  --code-bg: #09243a;
+  --code-fg: #ecc48d;
+  --code-function: #82aaff;
+  --code-number: #f78c6c;
+  --quote-border: #4b6479;
+  --hr: #4b6479;
+  --table-border: #4b6479;
+  --h1: #b0b2f4;
+  --h2: #b0b2f4;
+  --h3: #7fdbca;
+  --h4: #f78c6c;
+  --h5: #87bcff;
+  --h6: #c792ea;
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-mono: monospace;
+  --font-size: 17px;
+}
