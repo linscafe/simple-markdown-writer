@@ -92,8 +92,9 @@ mdw --help            # all commands, including the background server
 | Ctrl+= / Ctrl+- / Ctrl+0 | Zoom in / out / reset |
 
 The title bar has an **S** button (unrendered source), a **W** box for the
-text column width in pixels (saved to `config.toml`), and a menu that opens files, shows a table of contents,
-zooms, and opens Preferences (`config.toml`).
+text column width in pixels (saved to `config.toml`), and a menu that opens
+files, shows a table of contents, zooms, picks a theme, and opens Preferences
+(`config.toml`).
 
 Settings live in `~/.config/mdw/config.toml`. See
 [`config.example.toml`](config.example.toml) for every option with its default.

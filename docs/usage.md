@@ -39,6 +39,7 @@ The menu button at the right of the title bar has:
 - **Zoom In / Zoom Out / Reset Zoom**: Ctrl+= (or Ctrl++), Ctrl+-, Ctrl+0.
   Zoom applies to every window and is remembered. Change the keys with
   `zoom_in_key`, `zoom_out_key` and `zoom_reset_key` in the config.
+- **Theme…**: opens the theme picker (same as Ctrl+Shift+T).
 - **Preferences**: opens `~/.config/mdw/config.toml` in mdw, creating it with
   every default (commented) if it doesn't exist.
 

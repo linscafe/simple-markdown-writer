@@ -84,6 +84,7 @@ fn build(window: &WebviewWindow, toc: bool, width: f64) -> Result<(), String> {
     item(&zoom, "Reset Zoom", "win.zoom-reset");
     menu.append_section(None, &zoom);
     let settings = gio::Menu::new();
+    item(&settings, "Theme…", "win.theme");
     item(&settings, "Preferences", "win.preferences");
     menu.append_section(None, &settings);
 
@@ -171,6 +172,12 @@ fn build(window: &WebviewWindow, toc: bool, width: f64) -> Result<(), String> {
     };
     simple("open", Box::new(pick_and_open));
     simple("preferences", Box::new(open_preferences));
+    simple(
+        "theme",
+        Box::new(|app, label| {
+            let _ = app.emit_to(label, "mdw-theme-picker", ());
+        }),
+    );
     for (name, step) in [("zoom-in", 1), ("zoom-out", -1), ("zoom-reset", 0)] {
         simple(
             name,

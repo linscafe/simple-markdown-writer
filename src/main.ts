@@ -3,7 +3,7 @@ import { listenWindow } from "./window-events";
 import { createEditor, parentDirectory, setEditorSourceView } from "./editor";
 import { writeFile } from "./fsapi";
 import { isDirty, showMessage } from "./document";
-import { installUserThemes, listThemes, setTheme } from "./theme";
+import { installUserThemes, listThemes, openThemePicker, setTheme } from "./theme";
 import { applyConfig, persistEditorState, type AppState, type UserConfig } from "./settings";
 import { setTocVisible } from "./toc";
 import "./style.css";
@@ -169,10 +169,11 @@ async function main(): Promise<void> {
       document.documentElement.style.setProperty("--line-width", `${payload}px`);
       view.requestMeasure();
     });
+    const themePicker = listenWindow("mdw-theme-picker", () => openThemePicker());
     const messages = listenWindow<string>("mdw-message", ({ payload }) => {
       view.dispatch({ effects: showMessage.of(payload) });
     });
-    await Promise.all([shown, closeListener, prepareStop, cancelStop, tocToggle, sourceToggle, width, messages, frame]);
+    await Promise.all([shown, closeListener, prepareStop, cancelStop, tocToggle, sourceToggle, width, themePicker, messages, frame]);
     mark("finish_startup sent");
     await invoke("finish_startup", { ready: true, marks: timing ? timingMarks() : [] });
   } catch (error) {
