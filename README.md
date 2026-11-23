@@ -1,4 +1,4 @@
-# mdw — markdown writer
+# mdw — simple markdown writer
 
 A small, fast desktop editor for a single Markdown file, with Obsidian-style
 live preview: formatting renders in place as you type and turns back into plain
