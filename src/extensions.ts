@@ -2,7 +2,7 @@ import type { Extension } from "@codemirror/state";
 import { drawSelection, keymap } from "@codemirror/view";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
-import { languages } from "@codemirror/language-data";
+import { codeLanguage } from "./code-languages";
 import { savedDocument, statusMessage } from "./document";
 import { vimExtension } from "./vim";
 import { statusbarExtension } from "./statusbar";
@@ -26,10 +26,12 @@ export interface EditorContext {
   quit(): void;
 }
 
+const markdownSupport = markdown({ base: markdownLanguage, codeLanguages: codeLanguage });
+
 export function buildExtensions(context: EditorContext): Extension[] {
   return [
     vimExtension(context),
-    markdown({ base: markdownLanguage, codeLanguages: languages }),
+    markdownSupport,
     livePreview(context),
     imageInsertionExtension(context),
     linkPasteExtension(),

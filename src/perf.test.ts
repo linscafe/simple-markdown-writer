@@ -1,7 +1,7 @@
 import { ensureSyntaxTree, syntaxTree } from "@codemirror/language";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
-import { EditorState } from "@codemirror/state";
-import { beforeAll, describe, expect, it } from "vitest";
+import { EditorState, Text } from "@codemirror/state";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 import { generateLarge } from "../samples/gen-large.mjs";
 import { previewViewport, type VisibleRange } from "./livepreview/blocks";
 import { findCodeBlocks } from "./livepreview/codeblock";
@@ -41,6 +41,22 @@ beforeAll(() => {
 });
 
 describe("large document performance", () => {
+  it("indexes math near the first viewport without walking the whole document", () => {
+    const iterLines = Text.prototype.iterLines;
+    let scanned = 0;
+    const scan = vi.spyOn(Text.prototype, "iterLines").mockImplementation(function (this: Text, from = 1, to = this.lines + 1) {
+      scanned += to - from;
+      return iterLines.call(this, from, to);
+    });
+    try {
+      const initial = EditorState.create({ doc: generateLarge(lineCount), extensions: [mathBlockIndex] });
+      expect(findMathRanges(initial, [{ from: 0, to: initial.doc.line(60).to }]).length).toBeGreaterThan(0);
+      expect(scanned).toBeLessThan(120);
+    } finally {
+      scan.mockRestore();
+    }
+  });
+
   it("parses only up to the visible range", () => {
     expect(state.doc.lines).toBeGreaterThanOrEqual(lineCount);
     expect(syntaxTree(state).length).toBeGreaterThanOrEqual(visible[0].to);

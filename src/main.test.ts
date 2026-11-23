@@ -27,16 +27,26 @@ it("keeps the spare hidden until assigned, checks live dirty state, and closes i
   }
 
   vi.mocked(invoke).mockResolvedValue(null);
-  await import("./main");
-  await vi.waitFor(() => expect(invoke).toHaveBeenCalledWith("get_initial_session", { listening: true }));
-  expect(document.querySelector(".cm-editor")).toBeNull();
-  expect(invoke).not.toHaveBeenCalledWith("show_window");
-  emit("mdw-assign", {
-    doc: { path: "/notes/new.md", content: "sample" },
-    state: { files: {}, theme: null, window: null },
-    config: { theme: "nord", vim: true, vim_maps: [], font_size: 18, line_width: 760 },
-    themes: [], timing: true,
-  });
+  vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+  try {
+    await import("./main");
+    await vi.advanceTimersByTimeAsync(0);
+    expect(invoke).toHaveBeenCalledWith("get_initial_session", { listening: true });
+    expect(document.querySelector(".cm-editor")).toBeTruthy();
+    expect(invoke).not.toHaveBeenCalledWith("show_window");
+    emit("mdw-assign", {
+      doc: { path: "/notes/new.md", content: "sample" },
+      state: { files: {}, theme: null, window: null },
+      config: { theme: "nord", vim: true, vim_maps: [], font_size: 18, line_width: 760 },
+      themes: [], timing: true,
+    });
+    await vi.advanceTimersByTimeAsync(0);
+    expect(invoke).toHaveBeenCalledWith("show_window");
+    expect(document.querySelectorAll(".cm-editor")).toHaveLength(1);
+    expect(document.querySelector(".cm-content")?.textContent).toBe("sample");
+  } finally {
+    vi.useRealTimers();
+  }
   await vi.waitFor(() => expect(invoke).toHaveBeenCalledWith("finish_startup", {
     ready: true,
     marks: expect.arrayContaining([["[js] first frame", expect.any(Number)]]),

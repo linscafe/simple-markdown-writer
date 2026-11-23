@@ -1,5 +1,5 @@
 import { syntaxTree } from "@codemirror/language";
-import { RangeSet, RangeValue, StateField, type EditorState, type Range, type Text } from "@codemirror/state";
+import { StateField, type EditorState, type Text } from "@codemirror/state";
 import { insideLiteral, touchesVisible, visibleLines, type SourceRange, type VisibleRange } from "./blocks";
 
 export interface MathRange extends SourceRange { expression: string; block: boolean }
@@ -10,18 +10,32 @@ function escaped(source: string, at: number): boolean {
   return slashes % 2 === 1;
 }
 
-class Marker extends RangeValue {}
-const marker = new Marker();
+// CodeMirror shares unchanged text leaves across edits. Their relative delimiter offsets stay valid.
+const leafDelimiters = new WeakMap<Text, number[]>();
 
-function delimiters(doc: Text, first: number, last: number): Range<Marker>[] {
-  const found: Range<Marker>[] = [];
-  let from = doc.line(first).from;
-  for (const text of doc.iterLines(first, last + 1)) {
+function delimiters(leaf: Text): number[] {
+  const cached = leafDelimiters.get(leaf);
+  if (cached) return cached;
+  const found: number[] = [];
+  let from = 0;
+  for (const text of leaf.iterLines()) {
     const match = /^\s*\$\$/.exec(text);
-    if (match) found.push(marker.range(from + match[0].length - 2));
+    if (match) found.push(from + match[0].length - 2);
     from += text.length + 1;
   }
+  leafDelimiters.set(leaf, found);
   return found;
+}
+
+function* leavesFrom(doc: Text, from: number, offset = 0): Generator<{ leaf: Text; offset: number }> {
+  if (!doc.children) {
+    yield { leaf: doc, offset };
+    return;
+  }
+  for (const child of doc.children) {
+    if (offset + child.length >= from) yield* leavesFrom(child, from, offset);
+    offset += child.length + 1;
+  }
 }
 
 interface DisplayMath extends SourceRange { leading: number; trailing: number }
@@ -29,13 +43,9 @@ interface DisplayMath extends SourceRange { leading: number; trailing: number }
 interface Pairing {
   blocks: DisplayMath[];
   next: number;
-  opening?: { from: number; leading: number };
 }
 
-// Keep delimiter positions through edits so scrolling into the middle of a formula
-// can recover its boundaries without rescanning the document's lines.
 interface MathIndex {
-  candidates: RangeSet<Marker>;
   tree: ReturnType<typeof syntaxTree>;
   // Filled lazily up to the furthest position queried, so edits only re-pair
   // delimiters between the edit and the viewport.
@@ -45,31 +55,36 @@ interface MathIndex {
 function pairUntil(state: EditorState, index: MathIndex, upto: number): DisplayMath[] {
   const pairing = index.pairing;
   if (pairing.next > upto) return pairing.blocks;
-  let opening = pairing.opening;
-  const cursor = index.candidates.iter(pairing.next);
-  for (; cursor.value; cursor.next()) {
-    const start = cursor.from;
-    if (start > upto && !opening) break;
-    if (insideLiteral(state, start, true)) continue;
-    const line = state.doc.lineAt(start);
-    const rest = line.text.slice(start + 2 - line.from);
-    if (opening) {
-      if (!rest.trim()) {
-        pairing.blocks.push({ from: opening.from, to: line.to, leading: opening.leading, trailing: line.to - start });
-        opening = undefined;
+  let opening: { from: number; leading: number } | undefined;
+  for (const { leaf, offset } of leavesFrom(state.doc, pairing.next)) {
+    if (offset > upto && !opening) break;
+    for (const relative of delimiters(leaf)) {
+      const start = offset + relative;
+      if (start < pairing.next) continue;
+      if (start > upto && !opening) {
+        pairing.next = start;
+        return pairing.blocks;
       }
-    } else {
-      const leading = start + 2 - line.from;
-      const close = rest.search(/\$\$\s*$/);
-      if (close >= 0 && !escaped(rest, close)) {
-        pairing.blocks.push({ from: line.from, to: line.to, leading, trailing: rest.length - close });
+      if (insideLiteral(state, start, true)) continue;
+      const line = state.doc.lineAt(start);
+      const rest = line.text.slice(start + 2 - line.from);
+      if (opening) {
+        if (!rest.trim()) {
+          pairing.blocks.push({ from: opening.from, to: line.to, leading: opening.leading, trailing: line.to - start });
+          opening = undefined;
+        }
       } else {
-        opening = { from: line.from, leading };
+        const leading = start + 2 - line.from;
+        const close = rest.search(/\$\$\s*$/);
+        if (close >= 0 && !escaped(rest, close)) {
+          pairing.blocks.push({ from: line.from, to: line.to, leading, trailing: rest.length - close });
+        } else {
+          opening = { from: line.from, leading };
+        }
       }
     }
+    pairing.next = offset + leaf.length + 1;
   }
-  pairing.next = cursor.value ? cursor.from : state.doc.length + 1;
-  pairing.opening = opening;
   return pairing.blocks;
 }
 
@@ -86,7 +101,6 @@ function firstEndingAtOrAfter(blocks: readonly DisplayMath[], pos: number): numb
 export const mathBlockIndex = StateField.define<MathIndex>({
   create(state) {
     return {
-      candidates: RangeSet.of(delimiters(state.doc, 1, state.doc.lines)),
       tree: syntaxTree(state),
       pairing: { blocks: [], next: 0 },
     };
@@ -96,25 +110,19 @@ export const mathBlockIndex = StateField.define<MathIndex>({
     const tree = syntaxTree(state);
     if (!transaction.docChanged && tree === value.tree) return value;
     const changes = transaction.changes;
-    let candidates = value.candidates.map(changes);
     // Literal status cannot change before the first edit or before the end of the
     // previously parsed tree, except on the line above, which may become a table header.
     let start = tree === value.tree ? state.doc.length
       : Math.min(changes.mapPos(value.tree.length, -1), tree.length);
-    changes.iterChangedRanges((_oldFrom, _oldTo, from, to) => {
-      const first = state.doc.lineAt(from), last = state.doc.lineAt(to);
-      start = Math.min(start, first.from);
-      candidates = candidates.update({
-        filterFrom: first.from, filterTo: last.to, filter: () => false,
-        add: delimiters(state.doc, first.number, last.number),
-      });
+    changes.iterChangedRanges((_oldFrom, _oldTo, from) => {
+      start = Math.min(start, from);
     });
     const line = state.doc.lineAt(start);
     start = line.number > 1 ? state.doc.line(line.number - 1).from : 0;
     const old = value.pairing;
-    if (old.next <= start) return { candidates, tree, pairing: { ...old, blocks: old.blocks.slice() } };
+    if (old.next <= start) return { tree, pairing: { ...old, blocks: old.blocks.slice() } };
     const kept = old.blocks.slice(0, firstEndingAtOrAfter(old.blocks, start));
-    return { candidates, tree, pairing: { blocks: kept, next: kept.length ? kept[kept.length - 1].to + 1 : 0 } };
+    return { tree, pairing: { blocks: kept, next: kept.length ? kept[kept.length - 1].to + 1 : 0 } };
   },
 });
 
