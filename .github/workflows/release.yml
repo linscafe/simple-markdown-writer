@@ -41,32 +41,37 @@ jobs:
           npm run check
           cd src-tauri && cargo test
 
-      - name: Build and attach to release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NO_STRIP: "true"
-        with:
-          tagName: ${{ github.ref_name }}
-          releaseName: mdw ${{ github.ref_name }}
-          releaseBody: |
-            Fedora: `sudo dnf install ./mdw-*.x86_64.rpm`
-            Debian/Ubuntu: `sudo apt install ./mdw_*_amd64.deb`
-            Any distribution: `chmod +x mdw_*.AppImage && ./mdw_*.AppImage`
-          releaseDraft: true
-
-      - name: Build only
-        if: "!startsWith(github.ref, 'refs/tags/')"
+      - name: Build
         env:
           NO_STRIP: "true"
         run: npx tauri build
+
+      # Fixed names keep the README's releases/latest/download links valid for every version.
+      - name: Collect packages
+        run: |
+          bundle=src-tauri/target/release/bundle
+          mkdir release-packages
+          cp $bundle/deb/*.deb release-packages/mdw_amd64.deb
+          cp $bundle/rpm/*.rpm release-packages/mdw.x86_64.rpm
+          cp $bundle/appimage/*.AppImage release-packages/mdw_x86_64.AppImage
+
+      - name: Attach to a draft release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > notes.md <<'NOTES'
+          Linux x86_64 packages. They run on Debian 12+, Ubuntu 22.04+ and current Fedora.
+
+          - Debian/Ubuntu: `sudo apt install ./mdw_amd64.deb`
+          - Fedora: `sudo dnf install ./mdw.x86_64.rpm`
+          - Any distribution: `chmod +x mdw_x86_64.AppImage && ./mdw_x86_64.AppImage`
+          NOTES
+          gh release create "$GITHUB_REF_NAME" release-packages/* --draft \
+            --title "mdw $GITHUB_REF_NAME" --notes-file notes.md
 
       - uses: actions/upload-artifact@v7
         if: "!startsWith(github.ref, 'refs/tags/')"
         with:
           name: linux-packages
-          path: |
-            src-tauri/target/release/bundle/rpm/*.rpm
-            src-tauri/target/release/bundle/deb/*.deb
-            src-tauri/target/release/bundle/appimage/*.AppImage
+          path: release-packages/*

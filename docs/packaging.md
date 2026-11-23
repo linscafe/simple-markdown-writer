@@ -43,7 +43,10 @@ bubblewrap cannot nest inside an unprivileged container.
 `.github/workflows/release.yml` builds on Ubuntu 22.04 and runs the checks:
 
 - **Push a tag** such as `v0.1.0` to build the three packages and attach them
-  to a **draft** release. Review the draft, then publish it.
+  to a **draft** release. Review the draft, then publish it. The files have
+  fixed names (`mdw_amd64.deb`, `mdw.x86_64.rpm`, `mdw_x86_64.AppImage`) so
+  the README's `releases/latest/download/...` links always fetch the newest
+  published release.
   ```sh
   git tag v0.1.0 && git push origin v0.1.0
   ```

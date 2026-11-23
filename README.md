@@ -49,6 +49,20 @@ document. Your results will vary with the hardware and the document.
 Linux. It has been tested on Fedora with WebKitGTK. macOS may work but is
 untested, and Windows is not supported.
 
+## Download
+
+Packages for Linux x86_64 are on the [latest release](https://github.com/linscafe/simple-markdown-writer/releases/latest).
+They run on Debian 12+, Ubuntu 22.04+ and current Fedora.
+
+| System | Download | Install |
+|---|---|---|
+| Debian, Ubuntu | [mdw_amd64.deb](https://github.com/linscafe/simple-markdown-writer/releases/latest/download/mdw_amd64.deb) | `sudo apt install ./mdw_amd64.deb` |
+| Fedora | [mdw.x86_64.rpm](https://github.com/linscafe/simple-markdown-writer/releases/latest/download/mdw.x86_64.rpm) | `sudo dnf install ./mdw.x86_64.rpm` |
+| Any distribution | [mdw_x86_64.AppImage](https://github.com/linscafe/simple-markdown-writer/releases/latest/download/mdw_x86_64.AppImage) | `chmod +x mdw_x86_64.AppImage && ./mdw_x86_64.AppImage` |
+
+The deb and rpm packages add mdw to the app menu and to "Open with" for
+Markdown files. The AppImage runs without installing.
+
 ## Install from source
 
 You need [Rust](https://rustup.rs), [Node.js](https://nodejs.org) 20 or newer,
