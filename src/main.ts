@@ -43,23 +43,27 @@ const warmUpSample = [
 ].join("\n");
 
 // A spare window renders a throwaway editor so code, styles and font faces are warm before a document arrives.
-async function warmUp(parent: HTMLElement): Promise<void> {
+async function warmUp(parent: HTMLElement, assigned: Promise<InitialSession>): Promise<void> {
   setTheme("auto");
   const view = createEditor({
     parent, path: "/mdw-warm-up/warm-up.md", dir: "/mdw-warm-up", content: warmUpSample,
     writeFile: async () => {}, quit: () => {},
   });
-  await new Promise((resolve) => setTimeout(resolve, 50));
-  void view.contentDOM.offsetHeight;
-  view.destroy();
-  parent.replaceChildren();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const warmed = new Promise<void>((resolve) => { timer = setTimeout(resolve, 50); });
+    const session = await Promise.race([assigned, warmed]);
+    if (!session) void view.contentDOM.offsetHeight;
+  } finally {
+    clearTimeout(timer);
+    view.destroy();
+  }
 }
 
 async function initialSession(parent: HTMLElement): Promise<InitialSession> {
   mark("invoke get_initial_session");
   const current = await invoke<InitialSession | null>("get_initial_session");
   if (current) return current;
-  await warmUp(parent).catch(console.error);
 
   let assign!: (session: InitialSession) => void;
   const assigned = new Promise<InitialSession>((resolve) => { assign = resolve; });
@@ -67,7 +71,12 @@ async function initialSession(parent: HTMLElement): Promise<InitialSession> {
   try {
     // Assignment can race listener registration on the first (cold) request.
     // Rust either returns the assigned session or arms event delivery under the same lock.
-    return await invoke<InitialSession | null>("get_initial_session", { listening: true }) ?? await assigned;
+    const pending = await Promise.race([
+      assigned, invoke<InitialSession | null>("get_initial_session", { listening: true }),
+    ]);
+    if (pending) return pending;
+    await warmUp(parent, assigned).catch(console.error);
+    return await assigned;
   } finally {
     unlisten();
   }

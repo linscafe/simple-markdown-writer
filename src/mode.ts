@@ -1,14 +1,14 @@
 import { Compartment, type Extension } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
-import { HighlightStyle, LanguageDescription, syntaxHighlighting } from "@codemirror/language";
+import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
-import { languages } from "@codemirror/language-data";
+import { codeLanguage, loadFileLanguage } from "./code-languages";
 import { tags } from "@lezer/highlight";
 import { livePreview } from "./livepreview";
 import type { EditorContext } from "./extensions";
 
 const modeCompartment = new Compartment();
-const markdownSupport = markdown({ base: markdownLanguage, codeLanguages: languages });
+const markdownSupport = markdown({ base: markdownLanguage, codeLanguages: codeLanguage });
 const sourceClass = EditorView.editorAttributes.of({ class: "mdw-source" });
 const markdownSourceHighlight = syntaxHighlighting(HighlightStyle.define([
   { tag: tags.heading, fontWeight: "bold", color: "var(--accent)" },
@@ -41,11 +41,9 @@ export function modeExtension(context: ModeContext): Extension {
 export function refreshMode(view: EditorView, context: ModeContext): void {
   view.dispatch({ effects: modeCompartment.reconfigure(modeFor(context)) });
   if (isMarkdownPath(context.path)) return;
-  const description = LanguageDescription.matchFilename(languages, context.path.split(/[\\/]/).pop() ?? "");
-  if (!description) return;
   const path = context.path;
-  description.load().then((support) => {
-    if (context.path === path) view.dispatch({ effects: modeCompartment.reconfigure([support, sourceClass]) });
+  loadFileLanguage(path.split(/[\\/]/).pop() ?? "").then((support) => {
+    if (support && context.path === path) view.dispatch({ effects: modeCompartment.reconfigure([support, sourceClass]) });
   }).catch(console.error);
 }
 

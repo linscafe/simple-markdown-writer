@@ -106,6 +106,18 @@ describe("math detection", () => {
     expect(ranges).toHaveLength(1);
     expect(state.sliceDoc(ranges[0].from, ranges[0].to)).toBe("$$\nx^2\ny^2\n$$");
   });
+
+  it("looks past the viewport for a closer and notices edits in the distant text", () => {
+    const doc = "before\n\n$$\n" + "x\n".repeat(200) + "$$\n\nafter";
+    const visible = [{ from: 0, to: doc.indexOf("x") }];
+    const state = stateFor(doc);
+    const close = doc.lastIndexOf("$$");
+    expect(findMathRanges(state, visible).map(r => r.to)).toEqual([close + 2]);
+    const opened = state.update({ changes: { from: close, to: close + 2 } }).state;
+    expect(findMathRanges(opened, visible)).toEqual([]);
+    const closed = opened.update({ changes: { from: opened.doc.length, insert: "\n$$" } }).state;
+    expect(findMathRanges(closed, visible).map(r => r.to)).toEqual([closed.doc.length]);
+  });
 });
 
 describe("image parsing and resolution", () => {
