@@ -4,6 +4,7 @@ import { buildExtensions, type EditorContext } from "./extensions";
 import { isDirty, markSaved, showMessage } from "./document";
 import type { FileState, UserConfig } from "./settings";
 import { openDocument } from "./fsapi";
+import { isMarkdownPath, refreshMode, setSourceView } from "./mode";
 
 interface EditorOptions {
   parent: HTMLElement;
@@ -11,6 +12,7 @@ interface EditorOptions {
   dir: string;
   content: string;
   config?: UserConfig;
+  showToc?: boolean;
   cursor?: number;
   fileStates?: Record<string, FileState>;
   beforeDocumentChange?(): Promise<void>;
@@ -23,6 +25,14 @@ export function parentDirectory(path: string): string {
   return path.replace(/[\\/][^\\/]*$/, "") || "/";
 }
 
+const contexts = new WeakMap<EditorView, EditorContext>();
+
+/** Toggles plain-source display of Markdown in this editor; other files are always source. */
+export function setEditorSourceView(view: EditorView, source: boolean): void {
+  const context = contexts.get(view);
+  if (context) setSourceView(view, context, source);
+}
+
 export function createEditor(options: EditorOptions): EditorView {
   let view: EditorView;
   let pendingSave: Promise<void> = Promise.resolve();
@@ -33,6 +43,7 @@ export function createEditor(options: EditorOptions): EditorView {
     path: options.path,
     dir: options.dir,
     config: options.config,
+    showToc: options.showToc,
     save: () => {
       const snapshot = view.state.doc;
       const path = context.path;
@@ -71,6 +82,7 @@ export function createEditor(options: EditorOptions): EditorView {
           selection: { anchor: Math.max(0, Math.min(anchor, doc.content.length)) },
           extensions,
         }));
+        refreshMode(view, context);
         options.documentChanged?.(doc.path);
         view.dispatch({ effects: EditorView.scrollIntoView(view.state.selection.main.head) });
         view.focus();
@@ -86,6 +98,7 @@ export function createEditor(options: EditorOptions): EditorView {
       context.path = path;
       context.dir = path.replace(/[\\/][^\\/]*$/, "") || "/";
       if (previous && options.fileStates) options.fileStates[path] = { ...previous };
+      refreshMode(view, context);
       options.documentChanged?.(path);
     },
     quit: options.quit,
@@ -100,6 +113,8 @@ export function createEditor(options: EditorOptions): EditorView {
   });
   performance.mark("mdw:state created");
   view = new EditorView({ parent: options.parent, state });
+  contexts.set(view, context);
+  if (!isMarkdownPath(context.path)) refreshMode(view, context);
   performance.mark("mdw:view created");
   view.focus();
   return view;

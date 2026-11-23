@@ -3,9 +3,12 @@
 mod client;
 mod commands;
 mod memory;
+#[cfg(target_os = "linux")]
+mod menu;
 mod protocol;
 mod server;
 mod sessions;
+mod shortcut;
 mod timing;
 mod watcher;
 mod windows;
@@ -63,6 +66,7 @@ fn gui(path: Option<PathBuf>, server: Option<(UnixListener, PathBuf)>) -> Result
     let resident = server.is_some();
     let app = tauri::Builder::default()
         .manage(sessions::Sessions::default())
+        .manage(windows::Resident(resident))
         .plugin(tauri_plugin_dialog::init())
         .plugin(
             tauri_plugin_opener::Builder::new()
@@ -99,6 +103,7 @@ fn gui(path: Option<PathBuf>, server: Option<(UnixListener, PathBuf)>) -> Result
             commands::config::get_initial_session,
             commands::config::show_window,
             commands::config::finish_startup,
+            commands::config::zoom,
         ])
         .setup(move |app| {
             timing::mark("setup");

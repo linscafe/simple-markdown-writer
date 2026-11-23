@@ -1,0 +1,47 @@
+.cm-editor { --toc-width: min(260px, 35vw); }
+.cm-editor.mdw-toc-open .cm-scroller { padding-left: var(--toc-width); }
+
+.mdw-toc {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  width: var(--toc-width);
+  overflow-y: auto;
+  padding: 28px 8px 56px 12px;
+  border-right: 1px solid var(--hr);
+  background: var(--bg);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.mdw-toc[hidden] { display: none; }
+.mdw-toc ol { list-style: none; margin: 0; padding: 0; }
+
+.mdw-toc button {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.mdw-toc button:hover { color: var(--fg); background: var(--line-active); }
+.mdw-toc button[aria-current] { color: var(--accent); font-weight: 600; }
+.mdw-toc button[data-level="1"] { color: var(--fg); font-weight: 600; }
+.mdw-toc button[data-level="1"][aria-current] { color: var(--accent); }
+.mdw-toc button[data-level="2"] { padding-left: 20px; }
+.mdw-toc button[data-level="3"] { padding-left: 32px; }
+.mdw-toc button[data-level="4"],
+.mdw-toc button[data-level="5"],
+.mdw-toc button[data-level="6"] { padding-left: 44px; }
+.mdw-toc-empty { margin: 4px 8px; color: var(--muted); }

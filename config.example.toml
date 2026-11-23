@@ -24,7 +24,7 @@ theme = "auto"
 
 # Text size in px.
 font_size = 17
-# Maximum width of the text column in px.
+# Maximum width of the text column in px. The W box in the title bar sets it.
 line_width = 760
 
 # Folder for pasted/dropped images, relative to the document.
@@ -35,6 +35,14 @@ image_dir = "{name}.assets"
 # true: copy dropped/picked images into image_dir
 # false: link to the original file instead (Shift+drop does this for one drop)
 copy_images = true
+
+# Zoom shortcuts: one key or a list. Modifiers: Ctrl, Shift, Alt, Super.
+# Keys: a character, F1-F24, or Plus, Minus, Space, Enter, Tab, Escape,
+# Backspace, Delete, Home, End, PageUp, PageDown, Up, Down, Left, Right.
+# e.g. "Ctrl+Shift+Z" | ["Ctrl+=", "Ctrl+Plus"] | [] (no shortcut)
+zoom_in_key = ["Ctrl+=", "Ctrl++"]
+zoom_out_key = "Ctrl+-"
+zoom_reset_key = "Ctrl+0"
 
 # Vim keybindings: true | false. Ctrl+Alt+V toggles for the current session.
 vim = true

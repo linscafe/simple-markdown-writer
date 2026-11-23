@@ -22,6 +22,29 @@ first content, versus ~420 ms for a standalone start.
 
 ## Usage
 
+### Title bar
+Next to the menu button:
+
+- **S** (source) shows the Markdown as plain text, without rendering, in a
+  monospace font. Per window; not remembered.
+- **W** (width) is the text column width in pixels. Type a number from 200 to
+  4000 and press Enter: the window updates and the value is saved as
+  `line_width` in `config.toml`, so windows opened later use it too.
+
+The menu button at the right of the title bar has:
+
+- **Open File…**: pick a Markdown file; it opens in its own window.
+- **Show Table of Contents**: a sidebar listing the document's headings. Click
+  one to jump to it; the heading you are in is highlighted. Remembered.
+- **Zoom In / Zoom Out / Reset Zoom**: Ctrl+= (or Ctrl++), Ctrl+-, Ctrl+0.
+  Zoom applies to every window and is remembered. Change the keys with
+  `zoom_in_key`, `zoom_out_key` and `zoom_reset_key` in the config.
+- **Preferences**: opens `~/.config/mdw/config.toml` in mdw, creating it with
+  every default (commented) if it doesn't exist.
+
+Files that aren't Markdown (`.toml`, `.json`, `.txt`, ...) open as plain source,
+with syntax highlighting for their language.
+
 ### Vim mode
 On by default. **Ctrl+Alt+V** toggles it for the current session (`:novim` also
 turns it off; use Ctrl+Alt+V to turn it back on). Set `vim = false` in the
@@ -63,6 +86,8 @@ mkdir -p ~/.config/mdw && cp config.example.toml ~/.config/mdw/config.toml
 ```
 
 Settings: `server`, `theme`, `font_body`, `font_mono`, `font_size`, `line_width`,
-`image_dir`, `copy_images`, `vim` (or a `[vim]` table with custom key mappings).
-New document windows pick up config and theme file edits. Window size and per-file cursor positions are kept in
+`image_dir`, `copy_images`, `zoom_in_key`, `zoom_out_key`, `zoom_reset_key`,
+`vim` (or a `[vim]` table with custom key mappings). **Preferences** in the
+window menu opens the file, creating it first if needed.
+New document windows pick up config and theme file edits. Window size, zoom, the table-of-contents setting and per-file cursor positions are kept in
 `~/.config/mdw/state.json`.

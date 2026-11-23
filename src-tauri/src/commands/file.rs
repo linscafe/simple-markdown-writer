@@ -145,7 +145,7 @@ pub async fn write_file(
     .map_err(|error| error.to_string())?
 }
 
-pub(super) fn atomic_write(path: &Path, content: &str) -> Result<(), String> {
+pub(crate) fn atomic_write(path: &Path, content: &str) -> Result<(), String> {
     let directory = path
         .parent()
         .filter(|p| !p.as_os_str().is_empty())

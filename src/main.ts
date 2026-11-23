@@ -1,10 +1,11 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listenWindow } from "./window-events";
-import { createEditor, parentDirectory } from "./editor";
+import { createEditor, parentDirectory, setEditorSourceView } from "./editor";
 import { writeFile } from "./fsapi";
 import { isDirty, showMessage } from "./document";
 import { installUserThemes, listThemes, setTheme } from "./theme";
 import { applyConfig, persistEditorState, type AppState, type UserConfig } from "./settings";
+import { setTocVisible } from "./toc";
 import "./style.css";
 
 interface InitialSession {
@@ -91,6 +92,7 @@ async function main(): Promise<void> {
       parent,
       ...doc,
       config,
+      showToc: state.toc ?? false,
       fileStates: state.files,
       beforeDocumentChange: () => persistence.flush(),
       documentChanged: (path) => {
@@ -152,7 +154,16 @@ async function main(): Promise<void> {
         view.focus();
       }
     });
-    await Promise.all([shown, closeListener, prepareStop, cancelStop, frame]);
+    const tocToggle = listenWindow<boolean>("mdw-toc", ({ payload }) => setTocVisible(view, payload));
+    const sourceToggle = listenWindow<boolean>("mdw-source", ({ payload }) => setEditorSourceView(view, payload));
+    const width = listenWindow<number>("mdw-width", ({ payload }) => {
+      document.documentElement.style.setProperty("--line-width", `${payload}px`);
+      view.requestMeasure();
+    });
+    const messages = listenWindow<string>("mdw-message", ({ payload }) => {
+      view.dispatch({ effects: showMessage.of(payload) });
+    });
+    await Promise.all([shown, closeListener, prepareStop, cancelStop, tocToggle, sourceToggle, width, messages, frame]);
     mark("finish_startup sent");
     await invoke("finish_startup", { ready: true, marks: timing ? timingMarks() : [] });
   } catch (error) {

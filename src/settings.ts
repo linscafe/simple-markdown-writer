@@ -12,6 +12,7 @@ export interface UserConfig {
   vim_maps: { lhs: string; rhs: string; mode: string }[];
   image_dir: string;
   copy_images: boolean;
+  keymap: { zoom_in: string[]; zoom_out: string[]; zoom_reset: string[] };
   warning: string | null;
 }
 
@@ -26,6 +27,8 @@ export interface AppState {
   window: { w: number; h: number; x: number; y: number; maximized: boolean } | null;
   files: Record<string, FileState>;
   background?: string | null;
+  zoom?: number;
+  toc?: boolean;
 }
 
 export function applyConfig(config: UserConfig): void {

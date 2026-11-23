@@ -222,6 +222,7 @@ impl Server {
             if old_state.window != session.state.window {
                 windows::restore_bounds(&window, &session.state)?;
             }
+            windows::apply_view_state(&window, &session.state)?;
             if old_state.background != session.state.background {
                 let color = session
                     .state

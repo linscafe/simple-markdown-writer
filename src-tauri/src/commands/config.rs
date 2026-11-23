@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use tauri::{Emitter, Manager};
 
 use super::file::InitialDoc;
-use crate::{protocol::Marks, sessions::Sessions};
+use crate::{protocol::Marks, sessions::Sessions, shortcut::Shortcut};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct VimMap {
@@ -33,6 +33,65 @@ enum VimSetting {
 fn yes() -> bool {
     true
 }
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum KeySetting {
+    One(String),
+    Many(Vec<String>),
+}
+
+impl KeySetting {
+    fn keys(v: &[&str]) -> Self {
+        Self::Many(v.iter().map(|k| (*k).into()).collect())
+    }
+
+    fn list(self) -> Vec<String> {
+        match self {
+            Self::One(key) => vec![key],
+            Self::Many(keys) => keys,
+        }
+    }
+}
+
+/// Zoom shortcuts as written in config.toml, e.g. "Ctrl+=".
+#[derive(Clone, Debug, Serialize)]
+pub struct ZoomKeys {
+    pub zoom_in: Vec<String>,
+    pub zoom_out: Vec<String>,
+    pub zoom_reset: Vec<String>,
+}
+
+impl Default for ZoomKeys {
+    fn default() -> Self {
+        let keys = |v: &[&str]| KeySetting::keys(v).list();
+        Self {
+            zoom_in: keys(&["Ctrl+=", "Ctrl++"]),
+            zoom_out: keys(&["Ctrl+-"]),
+            zoom_reset: keys(&["Ctrl+0"]),
+        }
+    }
+}
+
+impl ZoomKeys {
+    /// The same shortcuts in CodeMirror key notation, for the editor keymap.
+    fn codemirror(&self) -> Result<Self, String> {
+        let convert = |keys: &[String]| -> Result<Vec<String>, String> {
+            keys.iter()
+                .map(|key| {
+                    Shortcut::parse(key)
+                        .map(|s| s.codemirror())
+                        .ok_or_else(|| format!("Invalid shortcut \"{key}\" in config.toml"))
+                })
+                .collect()
+        };
+        Ok(Self {
+            zoom_in: convert(&self.zoom_in)?,
+            zoom_out: convert(&self.zoom_out)?,
+            zoom_reset: convert(&self.zoom_reset)?,
+        })
+    }
+}
 impl Default for VimSetting {
     fn default() -> Self {
         Self::Enabled(true)
@@ -51,6 +110,8 @@ pub struct Config {
     pub vim_maps: Vec<VimMap>,
     pub image_dir: String,
     pub copy_images: bool,
+    /// Zoom shortcuts in CodeMirror key notation.
+    pub keymap: ZoomKeys,
     pub warning: Option<String>,
 }
 
@@ -67,6 +128,7 @@ impl Default for Config {
             vim_maps: vec![],
             image_dir: "{name}.assets".into(),
             copy_images: true,
+            keymap: ZoomKeys::default().codemirror().expect("default shortcuts"),
             warning: None,
         }
     }
@@ -84,6 +146,9 @@ struct ConfigFile {
     vim: VimSetting,
     image_dir: String,
     copy_images: bool,
+    zoom_in_key: KeySetting,
+    zoom_out_key: KeySetting,
+    zoom_reset_key: KeySetting,
 }
 
 impl Default for ConfigFile {
@@ -99,6 +164,9 @@ impl Default for ConfigFile {
             vim: VimSetting::default(),
             image_dir: config.image_dir,
             copy_images: config.copy_images,
+            zoom_in_key: KeySetting::Many(ZoomKeys::default().zoom_in),
+            zoom_out_key: KeySetting::Many(ZoomKeys::default().zoom_out),
+            zoom_reset_key: KeySetting::Many(ZoomKeys::default().zoom_reset),
         }
     }
 }
@@ -122,6 +190,18 @@ fn parse_config(source: &str) -> Config {
                 VimSetting::Enabled(enabled) => (enabled, vec![]),
                 VimSetting::Options { enabled, map } => (enabled, map),
             };
+            let zoom_keys = ZoomKeys {
+                zoom_in: file.zoom_in_key.list(),
+                zoom_out: file.zoom_out_key.list(),
+                zoom_reset: file.zoom_reset_key.list(),
+            };
+            let (keymap, warning) = match zoom_keys.codemirror() {
+                Ok(keymap) => (keymap, None),
+                Err(error) => (
+                    ZoomKeys::default().codemirror().expect("default shortcuts"),
+                    Some(format!("{error}; using default zoom shortcuts")),
+                ),
+            };
             Config {
                 server: file.server,
                 theme: file.theme,
@@ -133,12 +213,109 @@ fn parse_config(source: &str) -> Config {
                 vim_maps,
                 image_dir: file.image_dir,
                 copy_images: file.copy_images,
-                warning: None,
+                keymap,
+                warning,
             }
         }
         Ok(_) => config_warning("Invalid font_size or line_width; using default config".into()),
         Err(error) => config_warning(format!("Cannot parse config.toml; using defaults: {error}")),
     }
+}
+
+const CONFIG_TEMPLATE: &str = include_str!("../../../config.example.toml");
+
+/// Returns config.toml, creating it from the commented defaults if missing.
+pub fn config_file() -> Result<PathBuf, String> {
+    let path = config_directory()?.join("config.toml");
+    if !path.exists() {
+        fs::create_dir_all(config_directory()?).map_err(|e| e.to_string())?;
+        match OpenOptions::new().write(true).create_new(true).open(&path) {
+            Ok(mut file) => file
+                .write_all(CONFIG_TEMPLATE.as_bytes())
+                .map_err(|e| e.to_string())?,
+            Err(e) if e.kind() == ErrorKind::AlreadyExists => {}
+            Err(e) => return Err(e.to_string()),
+        }
+    }
+    Ok(path)
+}
+
+/// Sets a top-level `key = value` in TOML source, keeping comments and layout.
+fn set_top_level(source: &str, key: &str, value: &str) -> String {
+    let mut lines: Vec<String> = source.lines().map(String::from).collect();
+    let tables = lines
+        .iter()
+        .position(|line| line.trim_start().starts_with('['))
+        .unwrap_or(lines.len());
+    let setting = format!("{key} = {value}");
+    let existing = lines[..tables].iter().position(|line| {
+        line.trim_start()
+            .strip_prefix(key)
+            .is_some_and(|rest| rest.trim_start().starts_with('='))
+    });
+    match existing {
+        Some(index) => lines[index] = setting,
+        None => lines.insert(tables, setting),
+    }
+    lines.join("\n") + "\n"
+}
+
+/// Saves the text width chosen in the title bar to config.toml.
+pub fn save_line_width(width: u32) -> Result<(), String> {
+    let path = config_file()?;
+    let source = fs::read_to_string(&path).map_err(|e| e.to_string())?;
+    let updated = set_top_level(&source, "line_width", &width.to_string());
+    if let Some(warning) = parse_config(&updated).warning {
+        return Err(warning);
+    }
+    super::file::atomic_write(&path, &updated)
+}
+
+pub fn update_saved_state(update: impl FnOnce(&mut AppState)) -> Result<(), String> {
+    update_state(&config_directory()?.join("state.json"), update)
+}
+
+const ZOOM_LEVELS: [f64; 13] = [
+    0.5, 0.67, 0.75, 0.8, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0,
+];
+
+pub fn next_zoom(current: f64, step: i32) -> f64 {
+    let current = if current.is_finite() && current > 0.0 {
+        current
+    } else {
+        1.0
+    };
+    match step.signum() {
+        0 => 1.0,
+        1 => ZOOM_LEVELS
+            .into_iter()
+            .find(|z| *z > current + 0.001)
+            .unwrap_or(ZOOM_LEVELS[ZOOM_LEVELS.len() - 1]),
+        _ => ZOOM_LEVELS
+            .into_iter()
+            .rev()
+            .find(|z| *z < current - 0.001)
+            .unwrap_or(ZOOM_LEVELS[0]),
+    }
+}
+
+/// Changes the zoom of every window (step: 1 in, -1 out, 0 reset) and remembers it.
+pub fn change_zoom(app: &tauri::AppHandle, label: &str, step: i32) -> Result<(), String> {
+    let mut level = 1.0;
+    update_saved_state(|state| {
+        state.zoom = next_zoom(state.zoom, step);
+        level = state.zoom;
+    })?;
+    for window in app.webview_windows().values() {
+        window.set_zoom(level).map_err(|e| e.to_string())?;
+    }
+    app.emit_to(label, "mdw-message", format!("Zoom {:.0}%", level * 100.0))
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn zoom(window: tauri::WebviewWindow, step: i32) -> Result<(), String> {
+    change_zoom(window.app_handle(), window.label(), step)
 }
 
 fn config_directory() -> Result<PathBuf, String> {
@@ -172,15 +349,34 @@ pub struct WindowState {
     pub x: i32,
     pub y: i32,
     pub maximized: bool,
+    // w and h are logical window sizes; older states stored a larger,
+    // shadow-inclusive physical size and are not restored.
+    #[serde(default)]
+    pub logical: bool,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(default)]
 pub struct AppState {
     pub theme: Option<String>,
     pub window: Option<WindowState>,
     pub files: BTreeMap<String, FileState>,
     pub background: Option<String>,
+    pub zoom: f64,
+    pub toc: bool,
+}
+
+impl Default for AppState {
+    fn default() -> Self {
+        Self {
+            theme: None,
+            window: None,
+            files: BTreeMap::new(),
+            background: None,
+            zoom: 1.0,
+            toc: false,
+        }
+    }
 }
 
 impl AppState {
@@ -319,20 +515,39 @@ pub fn get_initial_session(
     })
 }
 
+// GTK's own size excludes the client-side shadow, so it restores exactly.
+#[cfg(target_os = "linux")]
+fn window_size(window: &tauri::WebviewWindow) -> Result<(u32, u32), String> {
+    use gtk::prelude::GtkWindowExt;
+    let (w, h) = window.gtk_window().map_err(|e| e.to_string())?.size();
+    Ok((w.max(0) as u32, h.max(0) as u32))
+}
+
+#[cfg(not(target_os = "linux"))]
+fn window_size(window: &tauri::WebviewWindow) -> Result<(u32, u32), String> {
+    let scale = window.scale_factor().map_err(|e| e.to_string())?;
+    let size = window
+        .inner_size()
+        .map_err(|e| e.to_string())?
+        .to_logical::<u32>(scale);
+    Ok((size.width, size.height))
+}
+
 fn capture_window(window: &tauri::WebviewWindow) -> Result<Option<WindowState>, String> {
     let sessions = window.state::<Sessions>();
     let mut bounds = sessions.with(window.label(), |s| Ok(s.bounds.clone()))?;
     let maximized = window.is_maximized().map_err(|error| error.to_string())?;
     // Keep the last normal bounds so unmaximizing restores the user's window.
     if !maximized || bounds.is_none() {
-        let size = window.inner_size().map_err(|error| error.to_string())?;
+        let (w, h) = window_size(window)?;
         let position = window.outer_position().map_err(|error| error.to_string())?;
         bounds = Some(WindowState {
-            w: size.width,
-            h: size.height,
+            w,
+            h,
             x: position.x,
             y: position.y,
             maximized,
+            logical: true,
         });
     } else if let Some(saved) = &mut bounds {
         saved.maximized = true;
@@ -516,6 +731,54 @@ mod tests {
         assert!(config.copy_images);
         assert_eq!(config.image_dir, "{name}.assets");
         assert!(config.warning.is_none());
+    }
+
+    #[test]
+    fn zoom_shortcuts_are_configurable() {
+        let config = parse_config("zoom_in_key = 'Ctrl+Shift+Z'\nzoom_out_key = ['Ctrl+-', 'F5']");
+        assert!(config.warning.is_none());
+        assert_eq!(config.keymap.zoom_in, ["Ctrl-Shift-z"]);
+        assert_eq!(config.keymap.zoom_out, ["Ctrl--", "F5"]);
+        assert_eq!(config.keymap.zoom_reset, ["Ctrl-0"]);
+
+        let config = parse_config("zoom_in_key = 'Hyper+Q'\ntheme = 'nord'");
+        assert_eq!(config.theme, "nord");
+        assert_eq!(config.keymap.zoom_in, ["Ctrl-=", "Ctrl-+"]);
+        assert!(config.warning.unwrap().contains("Hyper+Q"));
+    }
+
+    #[test]
+    fn line_width_is_set_in_place() {
+        let source = "# Width\nline_width = 760 # px\nvim = true\n[vim]\nenabled = true\n";
+        assert_eq!(
+            set_top_level(source, "line_width", "900"),
+            "# Width\nline_width = 900\nvim = true\n[vim]\nenabled = true\n"
+        );
+        assert_eq!(
+            set_top_level(
+                "# line_width = 1\n[vim]\nline_width = 2",
+                "line_width",
+                "900"
+            ),
+            "# line_width = 1\nline_width = 900\n[vim]\nline_width = 2\n"
+        );
+        assert_eq!(set_top_level("", "line_width", "900"), "line_width = 900\n");
+        let example = include_str!("../../../config.example.toml");
+        let updated = parse_config(&set_top_level(example, "line_width", "900"));
+        assert_eq!(updated.line_width, 900.0);
+        assert!(updated.warning.is_none());
+    }
+
+    #[test]
+    fn zoom_steps_through_levels() {
+        assert_eq!(next_zoom(1.0, 1), 1.1);
+        assert_eq!(next_zoom(1.0, -1), 0.9);
+        assert_eq!(next_zoom(1.3, -1), 1.25);
+        assert_eq!(next_zoom(3.0, 1), 3.0);
+        assert_eq!(next_zoom(0.5, -1), 0.5);
+        assert_eq!(next_zoom(2.0, 0), 1.0);
+        assert_eq!(next_zoom(0.0, 1), 1.1);
+        assert_eq!(serde_json::from_str::<AppState>("{}").unwrap().zoom, 1.0);
     }
 
     #[test]

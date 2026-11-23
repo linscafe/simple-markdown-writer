@@ -9,7 +9,8 @@ import { getCM, Vim } from "@replit/codemirror-vim";
 
 const config: UserConfig = {
   theme: "auto", font_body: "serif", font_mono: "monospace", font_size: 19, line_width: 850,
-  vim: false, vim_maps: [], image_dir: "{name}.assets", copy_images: true, warning: null,
+  vim: false, vim_maps: [], image_dir: "{name}.assets", copy_images: true,
+  keymap: { zoom_in: ["Ctrl-="], zoom_out: ["Ctrl--"], zoom_reset: ["Ctrl-0"] }, warning: null,
 };
 
 afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); });

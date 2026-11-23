@@ -28,3 +28,4 @@ body { margin: 0; }
 .cm-editor .cm-panels.cm-panels-bottom { border-top: 1px solid var(--muted); }
 .cm-vim-panel { padding: 6px 16px; font-family: inherit; }
 .cm-vim-panel input { font: inherit; background: var(--bg); color: var(--fg); border: none; outline-color: var(--accent); }
+.mdw-source .cm-scroller { font-family: var(--font-mono); font-size: calc(var(--font-size) * 0.9); }
